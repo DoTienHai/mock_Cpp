@@ -29,6 +29,6 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(INCS)
 	$(CC) $(CFLAGS) $(INC_DIRS) -c $< -o $@
 
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET)
+	@rm -rf $(BUILD_DIR) $(TARGET)
 
 .PHONY: clean

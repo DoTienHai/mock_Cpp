@@ -1,8 +1,6 @@
-#include "main.h"
-#include "MediaFile.h"
 #include "Playlist.h"
 
-void Playlist::addFile(const MediaFile& file) {
+void Playlist::addFile(const FileAbstract& file) {
     files.push_back(file);
 }
 
@@ -18,6 +16,6 @@ string Playlist::getName() {
     return name;
 }
 
-vector<MediaFile> Playlist::getFiles() {
+vector<FileAbstract> Playlist::getFiles() {
     return files;
 }
