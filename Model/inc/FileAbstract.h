@@ -1,23 +1,26 @@
 #ifndef FILE_ABSTRACT_H
 #define FILE_ABSTRACT_H
 #include <iostream>
+#include <taglib/taglib.h>
+#include <taglib/fileref.h>
 using namespace std;
-
-class FileAbstract
+using namespace TagLib;
+class FileAbstract : public FileRef
 {
 private:
-    string name;
     string path;
+    FileRef ref;
 
 public:
     FileAbstract();
-    FileAbstract(const string &n, const string &p);
+    FileAbstract(const string &p);
     virtual ~FileAbstract() = default;
 
-    void setName(const string &n);
     void setPath(const string &p);
-    string getName();
     string getPath();
+
+    FileRef getFileRef();
+    Tag *getTag();
 };
 
 #endif // ! FILE_ABSTRACT_H

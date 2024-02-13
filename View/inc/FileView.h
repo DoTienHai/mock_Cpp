@@ -12,7 +12,7 @@ private:
     /* data */
 public:
     FileView(/* args */);
-    virtual ~FileView();
+    virtual ~FileView() = default;
 
     void showFile(FileAbstract *file);
 };

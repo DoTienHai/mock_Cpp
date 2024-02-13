@@ -1,21 +1,37 @@
 #include "Playlist.h"
 
-void Playlist::addFile(const FileAbstract& file) {
-    files.push_back(file);
+Playlist::Playlist() {}
+Playlist::Playlist(const string &n) : name(n) {}
+Playlist::~Playlist()
+{
+    for (FileAbstract *it : this->playlist)
+    {
+        delete it;
+    }
+    this->playlist.clear();
 }
 
-// void Playlist::viewPlaylist() {
-//     cout << "Playlist - " << name << endl;
-//     for (auto& media_file : files) {
-//         cout << media_file.getName() << " - " << media_file.getPath() << endl;
-//     }
-//     cout << endl;
-// }
-
-string Playlist::getName() {
+void Playlist::addFile(FileAbstract *file)
+{
+    playlist.push_back(file);
+}
+void Playlist::deleteFile(FileAbstract *file)
+{
+    for (vector<FileAbstract *>::iterator it = playlist.begin(); it != playlist.end(); it++)
+    {
+        if ((*it) == file)
+        {
+            playlist.erase(it);
+            return;
+        }
+    }
+}
+string Playlist::getName()
+{
     return name;
 }
 
-vector<FileAbstract> Playlist::getFiles() {
-    return files;
+vector<FileAbstract *> Playlist::getPlaylist()
+{
+    return playlist;
 }

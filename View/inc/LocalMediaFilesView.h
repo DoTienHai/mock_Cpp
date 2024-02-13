@@ -2,6 +2,8 @@
 #define LOCAL_MEDIA_FILES_VIEW_H
 #include <iostream>
 #include "FileView.h"
+#include "Mp3File.h"
+#include "Mp4File.h"
 #include "LocalMediaList.h"
 using namespace std;
 

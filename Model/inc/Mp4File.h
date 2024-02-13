@@ -10,10 +10,8 @@ private:
     /* data */
 public:
     Mp4File(/* args */);
+    Mp4File(const string & path);
     ~Mp4File();
 };
-
-
-
 
 #endif // ! MP4_FILE_H

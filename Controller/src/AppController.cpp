@@ -1,11 +1,14 @@
 #include "AppController.h"
 
-AppController::AppController(/* args */)
-{
-}
+AppController::AppController(/* args */) {}
 
 AppController::~AppController()
 {
+    for (Playlist *it : this->playlistVector)
+    {
+        delete it;
+    }
+    playlistVector.clear();
 }
 
 void AppController::run()
@@ -52,7 +55,6 @@ int AppController::optionInput()
 
 void AppController::playWithLocalMediaFiles()
 {
-
     int option;
     do
     {
@@ -88,8 +90,25 @@ void AppController::listAllLocalMediaFiles()
 {
     localMediaFilesView.displayAllFiles(localFileList);
 }
+
 void AppController::modifyFile()
 {
+    localMediaFilesView.displayAllFiles(localFileList);
+    cout << "Select a number of file to modify: " << endl;
+    int numberInput;
+    cin >> numberInput;
+    cin.ignore();
+    FileAbstract *fileChosen = nullptr;
+    if (numberInput > 0 && numberInput <= (int)(localFileList.getList().size() - 1))
+    {
+        fileChosen = localFileList.getList().at(numberInput - 1);
+    }
+    else
+    {
+        cout << "invalid input!" << endl;
+        return;
+    }
+
     int option;
     do
     {
@@ -99,17 +118,18 @@ void AppController::modifyFile()
         {
         case SHOW_METADATA:
         {
-            showMetadata();
+            showMetadata(fileChosen);
             break;
         }
         case UPDATE_METADATA:
         {
-            updateMetadata();
+            updateMetadata(fileChosen);
             break;
         }
         case ADD_TO_PLAYLIST:
         {
-            addToPlaylist();
+            addToPlaylist(fileChosen);
+
             break;
         }
         case MODIFY_FILE_BACK:
@@ -123,20 +143,42 @@ void AppController::modifyFile()
             break;
         }
         }
-    } while (option != LOCAL_MEDIA_FILES_BACK);
+    } while (option != MODIFY_FILE_BACK);
 }
 
-void AppController::showMetadata()
+void AppController::showMetadata(FileAbstract *file)
 {
-    cout << "show meta data" << endl;
+    this->localMediaFilesView.showFile(file);
 }
-void AppController::updateMetadata()
+void AppController::updateMetadata(FileAbstract *file)
 {
     cout << "update meta data" << endl;
 }
-void AppController::addToPlaylist()
+void AppController::addToPlaylist(FileAbstract *file)
 {
     cout << "add to playlist." << endl;
+    if (playlistVector.size() == 0)
+    {
+        cout << "You don't have a playlist. Need to create one." << endl;
+        createPlaylist();
+        playlistVector.at(0)->addFile(file);
+    }
+    else
+    {
+        this->playlistView.showAllPlaylist(this->playlistVector);
+        cout << "Enter a number before the Playlist you want to modify:" << endl;
+        int numberInput;
+        cin >> numberInput;
+        if (numberInput > 0 && numberInput <= (int)playlistVector.size())
+        {
+            playlistVector.at(numberInput - 1)->addFile(file);
+        }
+        else
+        {
+            cout << "invalid input!" << endl;
+            return;
+        }
+    }
 }
 
 void AppController::playWithYourPlayLists()
@@ -148,6 +190,11 @@ void AppController::playWithYourPlayLists()
         option = optionInput();
         switch (option)
         {
+        case DISPLAY_ALL_PLAYLIST:
+        {
+            displayAllPlayList();
+            break;
+        }
         case CREATE_PLAYLIST:
         {
             createPlaylist();
@@ -177,16 +224,59 @@ void AppController::playWithYourPlayLists()
     } while (option != PLAYLIST_BACK);
 }
 
+void AppController::displayAllPlayList()
+{
+    this->playlistView.showAllPlaylist(this->playlistVector);
+}
+
 void AppController::createPlaylist()
 {
-    cout << "create a playlist." << endl;
+    cout << "Enter name of your playlist: " << endl;
+    string name;
+    cin >> name;
+    this->playlistVector.push_back(new Playlist(name));
+    this->playlistView.showAllPlaylist(this->playlistVector);
 }
 void AppController::DeletePlaylist()
 {
-    cout << "delete a playlist." << endl;
+    if (this->playlistVector.size())
+    {
+
+        this->playlistView.showAllPlaylist(this->playlistVector);
+        cout << "Enter a number before the Playlist you want to delete:" << endl;
+        int numberInput;
+        cin >> numberInput;
+        if (numberInput > 0 && numberInput <= (int)playlistVector.size())
+        {
+            playlistVector.erase(playlistVector.begin() + numberInput - 1);
+        }
+        else
+        {
+            cout << "invalid input!" << endl;
+            return;
+        }
+    }
+    else
+    {
+        cout << "There is no playlist to delete." << endl;
+    }
 }
 void AppController::modifyPlaylist()
 {
+    this->playlistView.showAllPlaylist(this->playlistVector);
+    cout << "Enter a number before the Playlist you want to modify:" << endl;
+    int numberInput;
+    cin >> numberInput;
+    Playlist *playlistModify = nullptr;
+    if (numberInput > 0 && numberInput <= (int)playlistVector.size())
+    {
+        playlistModify = playlistVector.at(numberInput - 1);
+    }
+    else
+    {
+        cout << "invalid input!" << endl;
+        return;
+    }
 
     int option;
     do
@@ -197,17 +287,17 @@ void AppController::modifyPlaylist()
         {
         case SHOW_PLAYLIST:
         {
-            showPlaylist();
+            showPlaylist(playlistModify);
             break;
         }
         case ADD_FILE:
         {
-            addFile();
+            addFile(playlistModify);
             break;
         }
         case DELETE_FILE:
         {
-            deleteFile();
+            deleteFile(playlistModify);
             break;
         }
         case MODIFY_PLAYLIST_BACK:
@@ -224,15 +314,48 @@ void AppController::modifyPlaylist()
     } while (option != MODIFY_PLAYLIST_BACK);
 }
 
-void AppController::showPlaylist()
+void AppController::showPlaylist(Playlist *playlist)
 {
-    cout << "show playlist" << endl;
+    this->playlistView.showPlaylist(playlist);
 }
-void AppController::addFile()
+void AppController::addFile(Playlist *playlist)
 {
-    cout << " add file to playlist" << endl;
+    if (localFileList.getList().size() != 0)
+    {
+        localMediaFilesView.displayAllFiles(localFileList);
+        cout << "Select a number of file to add to playlist " << playlist->getName() << endl;
+        int numberInput;
+        cin >> numberInput;
+        cin.ignore();
+        if (numberInput > 0 && numberInput <= (int)(localFileList.getList().size() - 1))
+        {
+            playlist->addFile(localFileList.getList().at(numberInput - 1));
+        }
+        else
+        {
+            cout << "invalid input!" << endl;
+            return;
+        }
+    }
+    else
+    {
+        cout << "there is no file in local to add!" << endl;
+    }
 }
-void AppController::deleteFile()
+void AppController::deleteFile(Playlist *playlist)
 {
-    cout << "delete a file from playlist." << endl;
+    this->playlistView.showPlaylist(playlist);
+    cout << "Enter a number before the file you want to delete:" << endl;
+    int numberInput;
+    cin >> numberInput;
+    if (numberInput > 0 && numberInput <= (int)playlist->getPlaylist().size())
+    {
+        FileAbstract *file = playlist->getPlaylist().at(numberInput - 1);
+        playlist->deleteFile(file);
+    }
+    else
+    {
+        cout << "invalid input!" << endl;
+        return;
+    }
 }

@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -std=c++17
 SRC_DIR = .
 BUILD_DIR = build
-TARGET = main
+TARGET = myMediaPLay
 
 # Source files
 SRCS = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*/*.cpp)
@@ -22,7 +22,7 @@ run: build
 build: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+	$(CC) $(CFLAGS) $(OBJS) -o $@ -ltag
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(INCS)
 	@mkdir -p $(dir $@)

@@ -39,20 +39,21 @@ private:
     void modifyFile();
 
     /* functions implement for modifyFile option */
-    void showMetadata();
-    void updateMetadata();
-    void addToPlaylist();
+    void showMetadata(FileAbstract * file);
+    void updateMetadata(FileAbstract * file);
+    void addToPlaylist(FileAbstract * file);
 
     /*******************************************************************************/
     /* functions implement for playWithYourPlayLists option */
+    void displayAllPlayList();
     void createPlaylist();
     void DeletePlaylist();
     void modifyPlaylist();
 
     /* functions implement for modifyPlaylist option */
-    void showPlaylist();
-    void addFile();
-    void deleteFile();
+    void showPlaylist(Playlist* playlist);
+    void addFile(Playlist* playlist);
+    void deleteFile(Playlist* playlist);
 };
 
 #endif // ! APP_CONTROLLER_H

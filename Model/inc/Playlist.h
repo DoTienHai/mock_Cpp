@@ -5,23 +5,23 @@
 #include "FileAbstract.h"
 using namespace std;
 
-
-class Playlist {
+class Playlist
+{
 private:
     string name;
-    vector<FileAbstract> files;
+    vector<FileAbstract *> playlist;
+
 public:
-    Playlist(const string& n) : name(n) {}
-    ~Playlist() = default;
+    Playlist();
+    Playlist(const string &n);
+    ~Playlist();
 
-    void addFile(const FileAbstract& file);
-
-    // void viewPlaylist();
+    void addFile(FileAbstract *file);
+    void deleteFile(FileAbstract *file);
 
     string getName();
 
-    vector<FileAbstract> getFiles();
+    vector<FileAbstract *> getPlaylist();
 };
-
 
 #endif // ! PLAYLIST_H
