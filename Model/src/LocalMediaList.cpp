@@ -18,7 +18,6 @@ LocalMediaList::LocalMediaList(/* args */)
         {
             if (entry.path().extension() == ".mp3")
             {
-                Mp3File a;
                 localFileList.push_back(new Mp3File(entry.path()));
             }
             if (entry.path().extension() == ".mp4")
@@ -36,6 +35,7 @@ LocalMediaList::~LocalMediaList()
         delete (it);
     }
     localFileList.clear();
+    cout << "local media list deconstructor" << endl;
 }
 
 vector<FileAbstract *> LocalMediaList::getList()

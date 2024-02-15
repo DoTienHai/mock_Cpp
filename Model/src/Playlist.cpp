@@ -4,11 +4,10 @@ Playlist::Playlist() {}
 Playlist::Playlist(const string &n) : name(n) {}
 Playlist::~Playlist()
 {
-    for (FileAbstract *it : this->playlist)
-    {
-        delete it;
-    }
-    this->playlist.clear();
+    cout << playlist.size() << endl;
+    playlist.clear();
+    cout << playlist.size() << endl;
+    cout << "deconstructor playlist" << endl;
 }
 
 void Playlist::addFile(FileAbstract *file)
@@ -34,4 +33,9 @@ string Playlist::getName()
 vector<FileAbstract *> Playlist::getPlaylist()
 {
     return playlist;
+}
+
+void Playlist::clear()
+{
+    playlist.clear();
 }

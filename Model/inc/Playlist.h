@@ -22,6 +22,8 @@ public:
     string getName();
 
     vector<FileAbstract *> getPlaylist();
+    void clear();
+
 };
 
 #endif // ! PLAYLIST_H

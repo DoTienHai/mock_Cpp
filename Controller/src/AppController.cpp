@@ -165,18 +165,30 @@ void AppController::addToPlaylist(FileAbstract *file)
     }
     else
     {
-        this->playlistView.showAllPlaylist(this->playlistVector);
-        cout << "Enter a number before the Playlist you want to modify:" << endl;
-        int numberInput;
-        cin >> numberInput;
-        if (numberInput > 0 && numberInput <= (int)playlistVector.size())
+        cout << "Do you want to add this file to a new playlist?(Y/N)";
+        string createOption;
+        cin >> createOption;
+        if (createOption == "Y" || createOption == "y")
         {
-            playlistVector.at(numberInput - 1)->addFile(file);
+            createPlaylist();
+            (*(playlistVector.end() - 1))->addFile(file);
         }
         else
         {
-            cout << "invalid input!" << endl;
-            return;
+
+            this->playlistView.showAllPlaylist(this->playlistVector);
+            cout << "Enter a number before the Playlist you want to modify:" << endl;
+            int numberInput;
+            cin >> numberInput;
+            if (numberInput > 0 && numberInput <= (int)playlistVector.size())
+            {
+                playlistVector.at(numberInput - 1)->addFile(file);
+            }
+            else
+            {
+                cout << "invalid input!" << endl;
+                return;
+            }
         }
     }
 }
@@ -248,7 +260,10 @@ void AppController::DeletePlaylist()
         cin >> numberInput;
         if (numberInput > 0 && numberInput <= (int)playlistVector.size())
         {
-            playlistVector.erase(playlistVector.begin() + numberInput - 1);
+            vector<Playlist *>::iterator temp = playlistVector.begin() + numberInput - 1;
+            (*temp)->clear();
+            delete (*temp);
+            playlistVector.erase(temp);
         }
         else
         {
