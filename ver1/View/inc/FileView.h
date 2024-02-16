@@ -6,6 +6,16 @@
 #include "Mp4File.h"
 using namespace std;
 
+enum PROPERTY_UPDATE
+{
+    TITLE = 1,
+    ALBUM = 2,
+    ARTIST = 3,
+    YEAR = 4,
+    PROPERTY_UPDATE_BACK = 0,
+};
+
+
 class FileView
 {
 private:
@@ -15,6 +25,7 @@ public:
     virtual ~FileView() = default;
 
     void showFile(FileAbstract *file);
+    void updateMetadataFileMenu(FileAbstract *file);
 };
 
 #endif // ! FILE_VIEW_H

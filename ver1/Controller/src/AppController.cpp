@@ -17,7 +17,7 @@ void AppController::run()
     do
     {
         appView.showMenu();
-        option = appView.intInput();
+        option = appView.intInput("Enter the number before option you want to select: ");
         switch (option)
         {
         case PLAY_WITH_LOCAL_MEDIA_FILES:
@@ -51,7 +51,7 @@ void AppController::playWithLocalMediaFiles()
     do
     {
         localMediaFilesView.showMenu();
-        option = appView.intInput();
+        option = appView.intInput("Enter the number before option you want to select: ");
         switch (option)
         {
         case LIST_ALL_LOCAL_MEDIA_FILES:
@@ -87,8 +87,7 @@ void AppController::listAllLocalMediaFiles()
 void AppController::modifyFile()
 {
     localMediaFilesView.displayAllFiles(localFileList);
-    cout << "Select a number of file to modify: " << endl;
-    int numberInput = appView.intInput();
+    int numberInput = appView.intInput("Enter the number before file you want to modify: ");
     FileAbstract *fileChosen = nullptr;
     if (numberInput > 0 && numberInput <= (int)(localFileList.getList().size()))
     {
@@ -104,7 +103,7 @@ void AppController::modifyFile()
     do
     {
         localMediaFilesView.showModifyFileMenu();
-        option = appView.intInput();
+        option = appView.intInput("Enter the number before option you want to select: ");
         switch (option)
         {
         case SHOW_METADATA:
@@ -143,7 +142,50 @@ void AppController::showMetadata(FileAbstract *file)
 }
 void AppController::updateMetadata(FileAbstract *file)
 {
-    cout << "update meta data" << endl;
+    
+    this->localMediaFilesView.updateMetadataFileMenu(file);
+    int option = appView.intInput("Enter the number before option you want to select: ");
+    switch (option)
+    {
+    case TITLE:
+    {
+        string input = appView.stringInput("Enter new title: ");
+        file->setTitle(input);
+        this->localMediaFilesView.showFile(file);
+        break;
+    }
+    case ALBUM:
+    {
+        string input = appView.stringInput("Enter new album: ");
+        file->setAlbum(input);
+        this->localMediaFilesView.showFile(file);
+        break;
+    }
+    case ARTIST:
+    {
+        string input = appView.stringInput("Enter new artist: ");
+        file->setArtist(input);
+        this->localMediaFilesView.showFile(file);
+        break;
+    }
+    case YEAR:
+    {
+        string input = appView.stringInput("Enter new year: ");
+        file->setYear(input);
+        this->localMediaFilesView.showFile(file);
+        break;
+    }
+    case PROPERTY_UPDATE_BACK:
+    {
+        appView.backMessage();
+        break;
+    }
+    default:
+    {
+        appView.invalidInputMessage();
+        break;
+    }
+    }
 }
 void AppController::addToPlaylist(FileAbstract *file)
 {
@@ -156,7 +198,7 @@ void AppController::addToPlaylist(FileAbstract *file)
     else
     {
         cout << "Do you want to add this file to a new playlist?(Y/N)";
-        string createOption = appView.stringInput();
+        string createOption = appView.stringInput("Enter your option: ");
         if (createOption == "Y" || createOption == "y")
         {
             createPlaylist();
@@ -166,8 +208,7 @@ void AppController::addToPlaylist(FileAbstract *file)
         {
 
             this->playlistView.showAllPlaylist(this->playlistVector);
-            cout << "Enter a number before the Playlist you want to modify:" << endl;
-            int numberInput = appView.intInput();
+            int numberInput = appView.intInput("Enter the number before playlist you want to add file: ");
             if (numberInput > 0 && numberInput <= (int)playlistVector.size())
             {
                 playlistVector.at(numberInput - 1)->addFile(file);
@@ -187,7 +228,7 @@ void AppController::playWithYourPlayLists()
     do
     {
         playlistView.showMenu();
-        option = appView.intInput();
+        option = appView.intInput("Enter the number before option you want to select: ");
         switch (option)
         {
         case DISPLAY_ALL_PLAYLIST:
@@ -231,8 +272,7 @@ void AppController::displayAllPlayList()
 
 void AppController::createPlaylist()
 {
-    cout << "Enter name of your playlist: " << endl;
-    string name = appView.stringInput();
+    string name = appView.stringInput("Enter name of new playlist: ");
     this->playlistVector.push_back(new Playlist(name));
     this->playlistView.showAllPlaylist(this->playlistVector);
 }
@@ -242,8 +282,7 @@ void AppController::DeletePlaylist()
     {
 
         this->playlistView.showAllPlaylist(this->playlistVector);
-        cout << "Enter a number before the Playlist you want to delete:" << endl;
-        int numberInput = appView.intInput();
+        int numberInput = appView.intInput("Enter the number before playlist you want to delete: ");
         if (numberInput > 0 && numberInput <= (int)playlistVector.size())
         {
             vector<Playlist *>::iterator temp = playlistVector.begin() + numberInput - 1;
@@ -265,8 +304,7 @@ void AppController::DeletePlaylist()
 void AppController::modifyPlaylist()
 {
     this->playlistView.showAllPlaylist(this->playlistVector);
-    cout << "Enter a number before the Playlist you want to modify:" << endl;
-    int numberInput = appView.intInput();
+    int numberInput = appView.intInput("Enter the number before option you want to select: ");
     Playlist *playlistModify = nullptr;
     if (numberInput > 0 && numberInput <= (int)playlistVector.size())
     {
@@ -282,7 +320,7 @@ void AppController::modifyPlaylist()
     do
     {
         playlistView.showModifyMenu();
-        option = appView.intInput();
+        option = appView.intInput("Enter the number before option you want to select: ");
         switch (option)
         {
         case SHOW_PLAYLIST:
@@ -323,8 +361,7 @@ void AppController::addFile(Playlist *playlist)
     if (localFileList.getList().size() != 0)
     {
         localMediaFilesView.displayAllFiles(localFileList);
-        cout << "Select a number of file to add to playlist " << playlist->getName() << endl;
-        int numberInput = appView.intInput();
+        int numberInput = appView.intInput("Enter the number before file you want to add: ");
         if (numberInput > 0 && numberInput <= (int)(localFileList.getList().size()))
         {
             playlist->addFile(localFileList.getFileAt(numberInput - 1));
@@ -343,8 +380,7 @@ void AppController::addFile(Playlist *playlist)
 void AppController::deleteFile(Playlist *playlist)
 {
     this->playlistView.showPlaylist(playlist);
-    cout << "Enter a number before the file you want to delete:" << endl;
-    int numberInput = appView.intInput();
+    int numberInput = appView.intInput("Enter the number before file you want to delete: ");
     if (numberInput > 0 && numberInput <= (int)playlist->getPlaylist().size())
     {
         FileAbstract *file = playlist->getFileAt(numberInput - 1);

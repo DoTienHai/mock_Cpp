@@ -6,10 +6,11 @@
 #include <taglib/fileref.h>
 using namespace std;
 using namespace TagLib;
-class FileAbstract : public FileRef
+class FileAbstract
 {
 private:
     string path;
+    FileRef ref;
 
 protected:
     FileRef getFileRef();

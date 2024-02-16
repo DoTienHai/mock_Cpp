@@ -21,15 +21,17 @@ void AppView::invalidInputMessage()
 {
     cout << "Invalid option!" << endl;
 }
-int AppView::intInput()
+int AppView::intInput(const string &msg)
 {
+    cout << msg << endl;
     int input;
     cin >> input;
     cin.ignore();
     return input;
 }
-string AppView::stringInput()
+string AppView::stringInput(const string &msg)
 {
+    cout << msg << endl;
     string input;
     getline(cin, input);
     return input;

@@ -23,8 +23,8 @@ public:
     void invalidInputMessage();
 
     /* get input option when has a menu */
-    int intInput();
-    string stringInput();
+    int intInput(const string & msg);
+    string stringInput(const string & msg);
 };
 
 #endif /* MAIN_MENU_VIEW_H */

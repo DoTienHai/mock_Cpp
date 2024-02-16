@@ -23,7 +23,6 @@ void LocalMediaFilesView::showModifyFileMenu()
     cout << ADD_TO_PLAYLIST << ". Add to playlist." << endl;
     cout << MODIFY_FILE_BACK << ". Back." << endl;
     cout << "----------------------------------------------------------------" << endl;
-
 }
 
 void LocalMediaFilesView::displayAllFiles(LocalMediaList &list)
@@ -34,7 +33,7 @@ void LocalMediaFilesView::displayAllFiles(LocalMediaList &list)
         int count = 1;
         for (FileAbstract *it : list.getList())
         {
-            cout << count << ". " << it->getPath() << endl;
+            cout << count << ". " << it->getName() << endl;
             count++;
         }
     }
